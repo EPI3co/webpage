@@ -1,21 +1,29 @@
 import os
 from urllib.parse import urlparse
-
 import requests
 
 
 def save_file(res, path):
     (dir, name) = os.path.split(path)
     os.makedirs(dir, exist_ok=True)
-    with open(path, 'wb') as fout:
-        for chunk in res:
-            fout.write(chunk)
+    if type(res) == requests.models.Response:
+        with open(path, 'wb') as fout:
+            for chunk in res:
+                fout.write(chunk)
+    else:
+        with open(path, 'w') as fout:
+            fout.write(res)
+
+
+def is_relative(linkstr):
+    n = urlparse(linkstr)
+    return n.netloc == ''
 
 
 def normalize_link(base, linkstr):
     n = urlparse(linkstr)
-    if n.netloc == '':
-        return base.scheme + '://'+base.netloc + base.path + n.path
+    if is_relative(linkstr):
+        return base._replace(path=n.path).geturl()
     else:
         return linkstr
 
@@ -33,12 +41,14 @@ def process_link(content_types, process_content, process_file):
         links = []
         # print(req.headers)
         if req.headers['content-type'] in content_types:
-            if process_content:
-                encoding = req.encoding
-                links = process_content(base, req.content, encoding)
             out_file = process_file(base)
             print("out: ", out_file)
-            save_file(req, out_file)
+            if process_content:
+                encoding = req.encoding
+                (content, links) = process_content(base, req.content, encoding)
+                save_file(content, out_file)
+            else:
+                save_file(req, out_file)
 
         return _normalize_links(base, links)
         # return links
