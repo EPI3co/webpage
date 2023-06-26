@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from lib.lib import all_links, process_link, normalize_link, is_relative
+import sys
 
 out_dir = './out'
 replace_url = ''
@@ -41,7 +42,11 @@ def process_html_file(link):
 
 def main():
 
-    url = 'https://einv-site.webflow.io/'
+    if len(sys.argv) < 2:
+        print("provide a URL to scrapper")
+        return
+    
+    url = sys.argv[1] #'https://einv.versoly.page/'
 
     runner = all_links(url,
                        process_link(

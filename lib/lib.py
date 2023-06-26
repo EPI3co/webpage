@@ -40,7 +40,9 @@ def process_link(content_types, process_content, process_file):
     def res(base, req):
         links = []
         # print(req.headers)
-        if req.headers['content-type'] in content_types:
+        content_type = req.headers['content-type'].split(';')[0]
+        print("content type:", content_type)
+        if content_type in content_types:
             out_file = process_file(base)
             print("out: ", out_file)
             if process_content:
