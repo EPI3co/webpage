@@ -1,4 +1,4 @@
-from webpage import webpage
+from webpage.webpage import download_webpage_cmd
 
 if __name__ == "__main__":
-    webpage()
+    download_webpage_cmd()
