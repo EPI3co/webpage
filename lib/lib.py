@@ -47,7 +47,8 @@ def process_link(content_types, process_content_fn, process_file_fn):
             print("out: ", out_file)
             if process_content_fn:
                 encoding = req.encoding
-                (content, links) = process_content_fn(base, req.content, encoding)
+                (content, links) = process_content_fn(
+                    base, req.content, encoding)
                 save_file(content, out_file)
             else:
                 save_file(req, out_file)
@@ -89,5 +90,5 @@ def all_links(root, *args):
                 add_links(links_stack_processed, new_links)
                 links_stack_processed[_link] = True
 
-        return  urlparse(_link).netloc
+        return urlparse(root).netloc
     return run
