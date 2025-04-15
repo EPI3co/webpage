@@ -89,4 +89,5 @@ def all_links(root, *args):
                 add_links(links_stack_processed, new_links)
                 links_stack_processed[_link] = True
 
+        return  urlparse(_link).netloc
     return run

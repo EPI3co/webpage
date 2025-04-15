@@ -115,8 +115,9 @@ def download_webpage(download_url, replace_url):
                        process_link(
                            'text/html', process_html_content, process_html_file))
 
-    download_page_runner()
-    copy_directory_contents('./public', './out')
+    out_link_dir = download_page_runner()
+    print("out page", out_link_dir)
+    copy_directory_contents('./public',  out_dir+'/'+out_link_dir.netloc)
     
     
 def download_webpage_cmd():
