@@ -104,7 +104,7 @@ def copy_directory_contents(source_dir, target_dir):
         print(f"Error copying files: {e}")
         return False
 
-def main():
+def download_webpage():
     argv = dict(enumerate(sys.argv))
     replace_env = os.getenv('DOWNLOAD_WEBPAGE_URL')
     download_url = replace_env if replace_env is not None else argv.get(1)
@@ -125,9 +125,4 @@ def main():
 
     download_page_runner()
     copy_directory_contents('./public', './out')
-    
-    
-if __name__ == "__main__":
-    main()
-    
     

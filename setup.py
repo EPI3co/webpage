@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="webpage",
-    version="0.1.1",
+    version="0.1.2",
     author="Sebastian Tabares Amaya",
     author_email="me@syta.co",
     description="A package for processing HTML files and web content",
