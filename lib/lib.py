@@ -35,7 +35,7 @@ def _normalize_links(base, links):
     return out
 
 
-def process_link(content_types, process_content, process_file):
+def process_link(content_types, process_content_fn, process_file_fn):
 
     def res(base, req):
         links = []
@@ -43,11 +43,11 @@ def process_link(content_types, process_content, process_file):
         content_type = req.headers['content-type'].split(';')[0]
         print("content type:", content_type)
         if content_type in content_types:
-            out_file = process_file(base)
+            out_file = process_file_fn(base)
             print("out: ", out_file)
-            if process_content:
+            if process_content_fn:
                 encoding = req.encoding
-                (content, links) = process_content(base, req.content, encoding)
+                (content, links) = process_content_fn(base, req.content, encoding)
                 save_file(content, out_file)
             else:
                 save_file(req, out_file)

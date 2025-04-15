@@ -4,6 +4,7 @@ import re
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from lib.lib import all_links, process_link, normalize_link, is_relative
+import shutil
 
 out_dir = './out'
 
@@ -61,10 +62,49 @@ def process_html_file(link):
         file = '.'.join(p) + '.html'
 
     return out_dir+'/'+link.netloc+file
-
+    
+def copy_directory_contents(source_dir, target_dir):
+    """
+    Copy all files from source_dir to target_dir.
+    Both directories should already exist.
+    
+    Args:
+        source_dir (str): Path to the source directory
+        target_dir (str): Path to the target directory
+    """
+    if not os.path.exists(source_dir):
+        print(f"Source directory {source_dir} does not exist.")
+        return False
+    
+    if not os.path.exists(target_dir):
+        print(f"Target directory {target_dir} does not exist.")
+        return False
+    
+    try:
+        # Walk through the source directory
+        for root, dirs, files in os.walk(source_dir):
+            # Calculate the relative path from source_dir
+            rel_path = os.path.relpath(root, source_dir)
+            # Create the corresponding directory in target_dir if it doesn't exist
+            if rel_path != '.':
+                target_subdir = os.path.join(target_dir, rel_path)
+                os.makedirs(target_subdir, exist_ok=True)
+            
+            # Copy all files in the current directory
+            for file in files:
+                source_file = os.path.join(root, file)
+                if rel_path == '.':
+                    target_file = os.path.join(target_dir, file)
+                else:
+                    target_file = os.path.join(target_dir, rel_path, file)
+                shutil.copy2(source_file, target_file)
+        
+        return True
+    except Exception as e:
+        print(f"Error copying files: {e}")
+        return False
 
 def main():
-
     argv = dict(enumerate(sys.argv))
     replace_env = os.getenv('DOWNLOAD_WEBPAGE_URL')
     download_url = replace_env if replace_env is not None else argv.get(1)
@@ -79,11 +119,15 @@ def main():
     if replace_url:
         params["replace_url"] = replace_url
 
-    runner = all_links(download_url,
+    download_page_runner = all_links(download_url,
                        process_link(
                            'text/html', process_html_content, process_html_file))
 
-    runner()
-
-
-main()
+    download_page_runner()
+    copy_directory_contents('./public', './out')
+    
+    
+if __name__ == "__main__":
+    main()
+    
+    
