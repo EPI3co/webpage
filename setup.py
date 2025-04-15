@@ -5,13 +5,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="webpage",
-    version="0.1.0",
+    version="0.1.1",
     author="Sebastian Tabares Amaya",
-    author_email="me@syta,ci",
+    author_email="me@syta.co",
     description="A package for processing HTML files and web content",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/webpage",
+    url="https://github.com/EPI3co/webpage.git",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

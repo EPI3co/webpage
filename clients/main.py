@@ -1,6 +1,4 @@
-from webpage.main import main
+from webpage import webpage
 
 if __name__ == "__main__":
-    main()
-    
-    
+    webpage()
