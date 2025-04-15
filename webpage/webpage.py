@@ -104,12 +104,10 @@ def copy_directory_contents(source_dir, target_dir):
         print(f"Error copying files: {e}")
         return False
 
-def download_webpage(download_url):
+def download_webpage(download_url, replace_url):
 
     params["download_url"] = download_url
 
-    replace_env = os.getenv('REPLACE_WEBPAGE_URL')
-    replace_url = replace_env if replace_env is not None else argv.get(2)
     if replace_url:
         params["replace_url"] = replace_url
 
@@ -126,7 +124,11 @@ def download_webpage_cmd():
     replace_env = os.getenv('DOWNLOAD_WEBPAGE_URL')
     download_url = replace_env if replace_env is not None else argv.get(1)
 
+    replace_env = os.getenv('REPLACE_WEBPAGE_URL')
+    replace_url = replace_env if replace_env is not None else argv.get(2)
+    
     if download_url is None:
         print("provide a URL to download (cmd argument or ENV variable)")
         return
-    return download_webpage(download_url)
+    
+    return download_webpage(download_url, replace_url)
